@@ -3,14 +3,21 @@ package com.mmall.service.impl;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
+import com.mmall.dao.SignInfoMapper;
 import com.mmall.dao.UserMapper;
+import com.mmall.pojo.SignInfo;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.DateTimeUtil;
 import com.mmall.util.MD5Util;
+
+import ch.qos.logback.classic.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -21,6 +28,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private SignInfoMapper signInfoMapper;
 
 
     @Override
@@ -202,6 +212,29 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createByError();
     }
+
+
+
+	@Override
+	public ServerResponse<String> signin(Integer userId) {
+		
+		SignInfo signInfo1 = signInfoMapper.isSignInByPrimaryKey(userId);
+		
+		if(signInfo1!=null) {
+			return ServerResponse.createByErrorMessage("当天已经签到，无需再签到");
+		}
+		
+		//Log;
+		
+		SignInfo signInfo =new SignInfo();
+		signInfo.setUserId(userId);
+		int  updateCount=signInfoMapper.insert(signInfo);
+		if(updateCount > 0){
+	            return ServerResponse.createBySuccess("签到成功");
+	        }
+	    return ServerResponse.createByErrorMessage("签到失败");
+		
+	}
 
 
 

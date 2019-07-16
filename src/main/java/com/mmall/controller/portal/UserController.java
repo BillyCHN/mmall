@@ -134,6 +134,22 @@ public class UserController {
         }
         return iUserService.getInformation(currentUser.getId());
     }
+    
+    /**
+     * 实现了签到功能
+     * @author billy
+     * @param
+     **/
+    @RequestMapping(value="signin.do",method=RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> signin(HttpSession session){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+    	return iUserService.signin(user.getId());
+    	
+    }
 
 
 

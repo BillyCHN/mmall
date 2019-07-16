@@ -1,5 +1,7 @@
 package com.mmall.service;
 
+import javax.servlet.http.HttpSession;
+
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 
@@ -27,4 +29,6 @@ public interface IUserService {
     ServerResponse<User> getInformation(Integer userId);
 
     ServerResponse checkAdminRole(User user);
+    
+    ServerResponse<String> signin(Integer userId);
 }
