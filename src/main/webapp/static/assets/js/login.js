@@ -46,3 +46,38 @@ $("#btn_login").onclick(function login() {
         }
     });
 })
+
+
+
+function btnOnclick(){
+	var name =$("#form-username").attr("value");
+
+	alert("username is "+obusernamej);
+	return;
+}
+
+function login(){
+	var name1 = $("#form-username").val();    //用户名
+	var pwd1 = $("#form-password").val();      //密码
+
+	var datas = new Object();                  //返回来的结果
+	var data={username:name1,password:pwd1}
+	$.ajax({
+		type: "post",
+		url : "/mmall/user/login.do",
+		async:false,
+		data:data,
+		dataType:"json",
+		contentType:"application/x-www-form-urlencoded",
+		success: function (datas) {   
+			if(datas.status==0){
+				$(location).prop('href', '../page/success.html')
+			}else{
+				alert(datas.msg);
+				return;
+			}	
+		}   
+	});
+
+}
+
